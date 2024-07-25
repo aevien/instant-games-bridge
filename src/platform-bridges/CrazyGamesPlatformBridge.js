@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode'
+import { jwtDecode } from 'jwt-encode'
 import PlatformBridgeBase from './PlatformBridgeBase'
 import { addJavaScript, waitFor } from '../common/utils'
 import {

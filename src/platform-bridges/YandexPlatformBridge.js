@@ -9,6 +9,8 @@ import {
     DEVICE_TYPE,
     BANNER_STATE,
     PLATFORM_MESSAGE,
+    PLUGIN_VERSION,
+    PLUGIN_NAME
 } from '../constants'
 
 const SDK_URL = 'https://yandex.ru/games/sdk/v2'

@@ -10,6 +10,7 @@ import {
     DEVICE_TYPE,
     PLATFORM_MESSAGE,
     ERROR,
+    PLUGIN_VERSION
 } from './constants'
 import PromiseDecorator from './common/PromiseDecorator'
 import PlatformModule from './modules/PlatformModule'

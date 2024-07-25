@@ -1,3 +1,6 @@
+export const PLUGIN_VERSION = ''
+export const PLUGIN_NAME = ''
+
 export const PLATFORM_ID = {
     VK: 'vk',
     VK_PLAY: 'vk_play',
