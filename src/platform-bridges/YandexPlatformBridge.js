@@ -13,7 +13,7 @@ import {
     PLUGIN_NAME
 } from '../constants'
 
-const SDK_URL = 'https://yandex.ru/games/sdk/v2'
+const SDK_URL = 'https://sdk.games.s3.yandex.net/sdk.js'
 
 class YandexPlatformBridge extends PlatformBridgeBase {
     // platform
@@ -104,11 +104,8 @@ class YandexPlatformBridge extends PlatformBridgeBase {
     }
 
     #isAddToHomeScreenSupported = false
-
     #yandexPlayer = null
-
     #leaderboards = null
-
     #payments = null
 
     initialize() {
