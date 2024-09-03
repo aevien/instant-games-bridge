@@ -17,6 +17,11 @@ class WortalPlatformBridge extends PlatformBridgeBase {
     get platformId() {
         return PLATFORM_ID.WORTAL
     }
+    
+    // social
+    get isExternalLinksAllowed() {
+        return false
+    }
 
     get platformLanguage() {
         if (this._platformSdk) {

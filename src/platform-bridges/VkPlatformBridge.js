@@ -109,10 +109,6 @@ class VkPlatformBridge extends PlatformBridgeBase {
         return true
     }
 
-    get isExternalLinksAllowed() {
-        return true
-    }
-
     // leaderboard
     get isLeaderboardSupported() {
         return true

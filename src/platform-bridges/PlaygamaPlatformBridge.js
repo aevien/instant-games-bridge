@@ -15,6 +15,11 @@ class PlaygamaPlatformBridge extends PlatformBridgeBase {
         return PLATFORM_ID.PLAYGAMA
     }
 
+    // social
+    get isExternalLinksAllowed() {
+        return false
+    }
+
     initialize() {
         if (this._isInitialized) {
             return Promise.resolve()

@@ -17,6 +17,11 @@ class GameDistributionPlatformBridge extends PlatformBridgeBase {
         return PLATFORM_ID.GAME_DISTRIBUTION
     }
 
+    // social
+    get isExternalLinksAllowed() {
+        return false
+    }
+
     #currentAdvertisementIsRewarded = false
 
     initialize() {

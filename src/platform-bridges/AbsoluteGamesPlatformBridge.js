@@ -21,6 +21,11 @@ class AbsoluteGamesPlatformBridge extends PlatformBridgeBase {
         return true
     }
 
+    // Social
+    get isExternalLinksAllowed() {
+        return false
+    }
+
     initialize() {
         if (this._isInitialized) {
             return Promise.resolve()
