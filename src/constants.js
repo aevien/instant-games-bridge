@@ -11,6 +11,7 @@ export const PLATFORM_ID = {
     GAME_DISTRIBUTION: 'game_distribution',
     PLAYGAMA: 'playgama',
     WORTAL: 'wortal',
+    PLAY_W3: 'play_web_3',
     MOCK: 'mock',
 }
 

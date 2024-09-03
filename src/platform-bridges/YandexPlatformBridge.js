@@ -114,6 +114,7 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         }
 
         let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.INITIALIZE)
+        
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.INITIALIZE)
 
