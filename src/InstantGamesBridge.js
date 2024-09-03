@@ -130,11 +130,8 @@ class InstantGamesBridge {
     }
 
     #isInitialized = false
-
     #initializationPromiseDecorator = null
-
     #platformBridge = null
-
     #modules = {}
 
     initialize(options) {

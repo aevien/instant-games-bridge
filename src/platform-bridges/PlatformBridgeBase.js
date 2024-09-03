@@ -178,31 +178,18 @@ class PlatformBridgeBase {
     }
 
     _isInitialized = false
-
     _platformSdk = null
-
     _isPlayerAuthorized = false
-
     _playerId = null
-
     _playerName = null
-
     _playerPhotos = []
-
     _visibilityState = null
-
     _localStorage = null
-
     _defaultStorageType = STORAGE_TYPE.LOCAL_STORAGE
-
     _platformStorageCachedData = null
-
     _isBannerSupported = false
-
     _interstitialState = null
-
     _rewardedState = null
-
     _bannerState = null
 
     #promiseDecorators = { }
