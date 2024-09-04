@@ -36,10 +36,11 @@ import PlaygamaPlatformBridge from './platform-bridges/PlaygamaPlatformBridge'
 import PlayDeckPlatformBridge from './platform-bridges/PlayDeckPlatformBridge'
 import WortalPlatformBridge from './platform-bridges/WortalPlatformBridge'
 import TelegramPlatformBridge from './platform-bridges/TelegramPlatformBridge'
+import packageJson from '../package.json';
 
 class InstantGamesBridge {
     get version() {
-        return PLUGIN_VERSION
+        return packageJson.version
     }
 
     get isInitialized() {

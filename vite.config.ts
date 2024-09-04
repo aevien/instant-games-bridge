@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import packageJson from './package.json';
 
 export default defineConfig({
   base: './',  // Это указывает Vite, что все пути должны быть относительно текущего каталога
