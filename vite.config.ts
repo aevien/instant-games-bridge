@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import packageJson from './package.json';
 
 export default defineConfig({
   base: './',  // Это указывает Vite, что все пути должны быть относительно текущего каталога
@@ -8,7 +7,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Указываем подкаталог без ведущего /
-        entryFileNames: `js/[name].js`,
+        entryFileNames: `js/instant-games-bridge.js`,
         chunkFileNames: `js/[name].js`,
         assetFileNames: `assets/[name].[ext]`,
       }

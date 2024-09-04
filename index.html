@@ -159,7 +159,8 @@
                 id="advertisement-show-interstitial-ignore-delay-button">Show Interstitial (ignore delay)</button>
               <button type="button" class="btn btn-info" id="advertisement-show-rewarded-button">Show
                 Rewarded</button>
-                <button type="button" class="btn btn-info" id="advertisement-is-adblock-detected-button">Is AdBlock Detected</button>
+              <button type="button" class="btn btn-success" id="advertisement-is-adblock-detected-button">Is AdBlock
+                Detected</button>
             </div>
           </div>
         </div>
@@ -740,10 +741,10 @@
         })
 
         advertisementAdBlockDetectButton.addEventListener('click', () => {
-            bridge.advertisement.isAdBlockDetected()
-                .then((res) => {
-                    advertisementIsAdBlockDetectedText.innerText = res
-                })
+          bridge.advertisement.checkAdBlock()
+            .then((res) => {
+              advertisementIsAdBlockDetectedText.innerText = res
+            })
         })
 
         socialShareButton.addEventListener('click', () => {
