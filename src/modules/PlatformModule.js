@@ -24,6 +24,10 @@ class PlatformModule extends ModuleBase {
     sendMessage(message) {
         return this._platformBridge.sendMessage(message)
     }
+
+    getServerTime() {
+        return this._platformBridge.getServerTime()
+    }
 }
 
 export default PlatformModule

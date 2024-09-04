@@ -9,11 +9,9 @@ import {
     DEVICE_TYPE,
     BANNER_STATE,
     PLATFORM_MESSAGE,
-    PLUGIN_VERSION,
-    PLUGIN_NAME
 } from '../constants'
 
-const SDK_URL = 'https://sdk.games.s3.yandex.net/sdk.js'
+const SDK_URL = '/sdk.js'
 
 class YandexPlatformBridge extends PlatformBridgeBase {
     // platform
@@ -72,7 +70,6 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         return true
     }
 
-    // social
     get isExternalLinksAllowed() {
         return false
     }
@@ -109,8 +106,11 @@ class YandexPlatformBridge extends PlatformBridgeBase {
     }
 
     #isAddToHomeScreenSupported = false
+
     #yandexPlayer = null
+
     #leaderboards = null
+
     #payments = null
 
     initialize() {
@@ -119,7 +119,6 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         }
 
         let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.INITIALIZE)
-        
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.INITIALIZE)
 
@@ -198,10 +197,25 @@ class YandexPlatformBridge extends PlatformBridgeBase {
                 this._platformSdk.features.LoadingAPI?.ready()
                 return Promise.resolve()
             }
+            case PLATFORM_MESSAGE.GAMEPLAY_STARTED: {
+                this._platformSdk.features.GameplayAPI?.start()
+                return Promise.resolve()
+            }
+            case PLATFORM_MESSAGE.GAMEPLAY_STOPPED: {
+                this._platformSdk.features.GameplayAPI?.stop()
+                return Promise.resolve()
+            }
             default: {
                 return super.sendMessage(message)
             }
         }
+    }
+
+    getServerTime() {
+        return new Promise((resolve) => {
+            const ts = this._platformSdk.serverTime()
+            resolve(ts)
+        })
     }
 
     // player
@@ -249,7 +263,7 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         return super.isStorageAvailable(storageType)
     }
 
-    getDataFromStorage(key, storageType) {
+    getDataFromStorage(key, storageType, tryParseJson) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             if (!this._isPlayerAuthorized) {
                 return Promise.reject()
@@ -307,7 +321,7 @@ class YandexPlatformBridge extends PlatformBridgeBase {
             })
         }
 
-        return super.getDataFromStorage(key, storageType)
+        return super.getDataFromStorage(key, storageType, tryParseJson)
     }
 
     setDataToStorage(key, value, storageType) {
@@ -436,6 +450,13 @@ class YandexPlatformBridge extends PlatformBridgeBase {
                     this._setRewardedState(REWARDED_STATE.FAILED)
                 },
             },
+        })
+    }
+
+    checkAdBlock() {
+        return new Promise((resolve) => {
+            // yandex shows ads even when adblock is on
+            resolve(false)
         })
     }
 
@@ -598,32 +619,13 @@ class YandexPlatformBridge extends PlatformBridgeBase {
                     let entries = null
 
                     if (result && result.entries.length > 0) {
-                        entries = result.entries.map((e) => {
-                            const photos = []
-                            const photoSmall = e.player.getAvatarSrc('small')
-                            const photoMedium = e.player.getAvatarSrc('medium')
-                            const photoLarge = e.player.getAvatarSrc('large')
-
-                            if (photoSmall) {
-                                photos.push(photoSmall)
-                            }
-
-                            if (photoMedium) {
-                                photos.push(photoMedium)
-                            }
-
-                            if (photoLarge) {
-                                photos.push(photoLarge)
-                            }
-
-                            return {
-                                id: e.player.uniqueID,
-                                score: e.score,
-                                rank: e.rank,
-                                name: e.player.publicName,
-                                photos,
-                            }
-                        })
+                        entries = result.entries.map((e) => ({
+                            id: e.player.uniqueID,
+                            score: e.score,
+                            rank: e.rank,
+                            name: e.player.publicName,
+                            photo: e.player.getAvatarSrc('large'),
+                        }))
                     }
 
                     this._resolvePromiseDecorator(ACTION_NAME.GET_LEADERBOARD_ENTRIES, entries)
@@ -669,7 +671,13 @@ class YandexPlatformBridge extends PlatformBridgeBase {
 
             this.#payments.getPurchases()
                 .then((result) => {
-                    this._resolvePromiseDecorator(ACTION_NAME.GET_PURCHASES, result)
+                    const purchases = result.map((i) => ({
+                        developerPayload: i.developerPayload,
+                        productID: i.productID,
+                        purchaseToken: i.purchaseToken,
+                    }))
+
+                    this._resolvePromiseDecorator(ACTION_NAME.GET_PURCHASES, purchases)
                 })
                 .catch((error) => {
                     this._rejectPromiseDecorator(ACTION_NAME.GET_PURCHASES, error)
@@ -690,7 +698,17 @@ class YandexPlatformBridge extends PlatformBridgeBase {
 
             this.#payments.getCatalog()
                 .then((result) => {
-                    this._resolvePromiseDecorator(ACTION_NAME.GET_CATALOG, result)
+                    const catalog = result.map((i) => ({
+                        id: i.id,
+                        description: i.description,
+                        imageURI: i.imageURI,
+                        price: i.price,
+                        priceCurrencyCode: i.priceCurrencyCode,
+                        priceValue: i.priceValue,
+                        priceCurrencyImage: i.getPriceCurrencyImage('medium'),
+                        title: i.title,
+                    }))
+                    this._resolvePromiseDecorator(ACTION_NAME.GET_CATALOG, catalog)
                 })
                 .catch((error) => {
                     this._rejectPromiseDecorator(ACTION_NAME.GET_CATALOG, error)

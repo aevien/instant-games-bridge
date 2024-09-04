@@ -48,7 +48,7 @@ class OkPlatformBridge extends PlatformBridgeBase {
     get isRateSupported() {
         return true
     }
-    
+
     get isExternalLinksAllowed() {
         return false
     }
@@ -141,7 +141,7 @@ class OkPlatformBridge extends PlatformBridgeBase {
         return super.isStorageAvailable(storageType)
     }
 
-    getDataFromStorage(key, storageType) {
+    getDataFromStorage(key, storageType, tryParseJson) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             if (!this._hasValuableAccessPermission) {
                 return Promise.reject(ERROR.STORAGE_NOT_AVAILABLE)
@@ -163,11 +163,13 @@ class OkPlatformBridge extends PlatformBridgeBase {
                                     return
                                 }
 
-                                let value
-                                try {
-                                    value = JSON.parse(response[item])
-                                } catch (e) {
-                                    value = response[item]
+                                let value = response[item]
+                                if (tryParseJson) {
+                                    try {
+                                        value = JSON.parse(response[item])
+                                    } catch (e) {
+                                        // keep value as it is
+                                    }
                                 }
 
                                 values.push(value)
@@ -182,11 +184,13 @@ class OkPlatformBridge extends PlatformBridgeBase {
                             return
                         }
 
-                        let value
-                        try {
-                            value = JSON.parse(response[key])
-                        } catch (e) {
-                            value = response[key]
+                        let value = response[key]
+                        if (tryParseJson) {
+                            try {
+                                value = JSON.parse(response[key])
+                            } catch (e) {
+                                // keep value as it is
+                            }
                         }
 
                         resolve(value)
@@ -197,7 +201,7 @@ class OkPlatformBridge extends PlatformBridgeBase {
             })
         }
 
-        return super.getDataFromStorage(key, storageType)
+        return super.getDataFromStorage(key, storageType, tryParseJson)
     }
 
     setDataToStorage(key, value, storageType) {
@@ -312,6 +316,16 @@ class OkPlatformBridge extends PlatformBridgeBase {
         this._platformSdk.invokeUIMethod('hideBannerAds')
     }
 
+    checkAdBlock() {
+        let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.ADBLOCK_DETECT)
+        if (!promiseDecorator) {
+            promiseDecorator = this._createPromiseDecorator(ACTION_NAME.ADBLOCK_DETECT)
+            this._platformSdk.invokeUIMethod('isAdBlockEnabled')
+        }
+
+        return promiseDecorator.promise
+    }
+
     inviteFriends(options) {
         const { text } = options || {}
 
@@ -405,6 +419,7 @@ class OkPlatformBridge extends PlatformBridgeBase {
             joinGroup: (result, data) => this.#onJoinGroupRequested(result, data),
             showLoginSuggestion: (result, data) => this.#onLoginCompleted(result, data),
             postMediatopic: (result, data) => this.#onPostCreatedCompleted(result, data),
+            isAdBlockEnabled: (result, data) => this.#onIsAdBlockEnabled(result, data),
         }
     }
 
@@ -570,6 +585,14 @@ class OkPlatformBridge extends PlatformBridgeBase {
             this._rejectPromiseDecorator(ACTION_NAME.CREATE_POST, data)
         } else {
             this._resolvePromiseDecorator(ACTION_NAME.CREATE_POST)
+        }
+    }
+
+    #onIsAdBlockEnabled(result, data) {
+        if (result === 'ok') {
+            this._resolvePromiseDecorator(ACTION_NAME.ADBLOCK_DETECT, data === 'true')
+        } else {
+            this._rejectPromiseDecorator(ACTION_NAME.ADBLOCK_DETECT)
         }
     }
 }

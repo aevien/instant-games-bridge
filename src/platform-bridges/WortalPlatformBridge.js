@@ -17,11 +17,6 @@ class WortalPlatformBridge extends PlatformBridgeBase {
     get platformId() {
         return PLATFORM_ID.WORTAL
     }
-    
-    // social
-    get isExternalLinksAllowed() {
-        return false
-    }
 
     get platformLanguage() {
         if (this._platformSdk) {
@@ -42,6 +37,11 @@ class WortalPlatformBridge extends PlatformBridgeBase {
         }
 
         return super.deviceType
+    }
+
+    // social
+    get isExternalLinksAllowed() {
+        return false
     }
 
     #supportedApis
@@ -177,6 +177,12 @@ class WortalPlatformBridge extends PlatformBridgeBase {
         )
     }
 
+    checkAdBlock() {
+        return new Promise((resolve) => {
+            resolve(this._platformSdk.ads.isAdBlocked())
+        })
+    }
+
     // storage
     isStorageSupported(storageType) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
@@ -194,7 +200,7 @@ class WortalPlatformBridge extends PlatformBridgeBase {
         return super.isStorageAvailable(storageType)
     }
 
-    getDataFromStorage(key, storageType) {
+    getDataFromStorage(key, storageType, tryParseJson) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             return new Promise((resolve, reject) => {
                 const keys = Array.isArray(key) ? key : [key]
@@ -231,7 +237,7 @@ class WortalPlatformBridge extends PlatformBridgeBase {
             })
         }
 
-        return super.getDataFromStorage(key, storageType)
+        return super.getDataFromStorage(key, storageType, tryParseJson)
     }
 
     setDataToStorage(key, value, storageType) {

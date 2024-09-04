@@ -27,11 +27,11 @@ class StorageModule extends ModuleBase {
         return this._platformBridge.isStorageAvailable(options)
     }
 
-    get(key, options) {
+    get(key, options, tryParseJson = true) {
         if (options) {
             const platformDependedOptions = options[this._platformBridge.platformId]
             if (platformDependedOptions) {
-                return this.get(key, platformDependedOptions)
+                return this.get(key, platformDependedOptions, tryParseJson)
             }
         }
 
@@ -44,7 +44,7 @@ class StorageModule extends ModuleBase {
             return Promise.reject()
         }
 
-        return this._platformBridge.getDataFromStorage(key, storageType)
+        return this._platformBridge.getDataFromStorage(key, storageType, tryParseJson)
     }
 
     set(key, value, options) {

@@ -1,6 +1,8 @@
 class PromiseDecorator {
     #promise
+
     #resolve
+
     #reject
 
     get promise() {

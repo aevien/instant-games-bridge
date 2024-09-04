@@ -173,6 +173,10 @@ class AdvertisementModule extends ModuleBase {
         this._platformBridge.showRewarded(options)
     }
 
+    checkAdBlock() {
+        return this._platformBridge.checkAdBlock()
+    }
+
     #startInterstitialTimer() {
         this.#interstitialTimer = new Timer(this.#minimumDelayBetweenInterstitial)
         this.#interstitialTimer.start()

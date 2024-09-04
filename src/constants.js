@@ -1,6 +1,3 @@
-export const PLUGIN_VERSION = ''
-export const PLUGIN_NAME = ''
-
 export const PLATFORM_ID = {
     VK: 'vk',
     VK_PLAY: 'vk_play',
@@ -11,7 +8,8 @@ export const PLATFORM_ID = {
     GAME_DISTRIBUTION: 'game_distribution',
     PLAYGAMA: 'playgama',
     WORTAL: 'wortal',
-    PLAY_W3: 'play_web_3',
+    PLAYDECK: 'playdeck',
+    TELEGRAM: 'telegram',
     MOCK: 'mock',
 }
 
@@ -82,6 +80,7 @@ export const PLATFORM_MESSAGE = {
     GAMEPLAY_STARTED: 'gameplay_started',
     GAMEPLAY_STOPPED: 'gameplay_stopped',
     PLAYER_GOT_ACHIEVEMENT: 'player_got_achievement',
+    GAME_OVER: 'game_over',
 }
 
 export const ACTION_NAME = {
@@ -105,6 +104,7 @@ export const ACTION_NAME = {
     GET_STORAGE_DATA: 'get_storage_data',
     SHOW_LEADERBOARD_NATIVE_POPUP: 'show_leaderboard_native_popup',
     CLIPBOARD_WRITE: 'clipboard_write',
+    ADBLOCK_DETECT: 'adblock_detect',
 }
 
 export const ERROR = {
